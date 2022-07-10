@@ -57,7 +57,6 @@ impl ISR {
                 is_match,
                 end,
             };
-            println!("{:?}", path);
             self.dfa.path_grow(path);
             if is_match {
                 self.move_cursor();
