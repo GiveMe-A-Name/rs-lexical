@@ -1,5 +1,5 @@
 [package]
-name = "lexical-rust-demo"
+name = "rs-lexical"
 version = "0.1.0"
 edition = "2021"
 authors = ["qixuan"]
