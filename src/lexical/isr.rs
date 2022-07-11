@@ -31,10 +31,10 @@ impl ISR {
         self.dfa.reset();
     }
 
-    pub fn scanner(&mut self, stream: String) -> &Vec<Token> {
+    pub fn scanner(&mut self, stream: String) -> Vec<&Token> {
         self.initial(stream);
         self.read();
-        &self.dfa.tokens
+        self.dfa.tokens()
     }
 
     fn read(&mut self) {

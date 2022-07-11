@@ -86,4 +86,11 @@ impl DFA {
         self.matches.clear();
         self.state = DFAStateConst::default();
     }
+
+    pub fn tokens(&self) -> Vec<&Token> {
+        self.tokens
+            .iter()
+            .filter(|token| token._type != "Whitespace".to_string())
+            .collect::<Vec<_>>()
+    }
 }
