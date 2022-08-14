@@ -15,12 +15,6 @@ pub struct Token {
     pub value: String,
 }
 
-impl Token {
-    pub fn new(_type: String, value: String) -> Self {
-        Token { _type, value }
-    }
-}
-
 #[derive(Default)]
 pub struct DFA {
     pub state: DFAState,

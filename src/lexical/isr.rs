@@ -86,16 +86,30 @@ mod tests {
     fn test_create_tokens() {
         let code = "const a = 10;";
         let tokens = [
-            &Token::new("Identifier".to_owned(), "const".to_owned()),
-            &Token::new("Identifier".to_owned(), "a".to_owned()),
-            &Token::new("Symbol".to_owned(), "=".to_owned()),
-            &Token::new("Number".to_owned(), "10".to_owned()),
-            &Token::new("Symbol".to_owned(), ";".to_owned()),
+            &Token {
+                _type: "Identifier".to_owned(),
+                value: "const".to_owned(),
+            },
+            &Token {
+                _type: "Identifier".to_owned(),
+                value: "a".to_owned(),
+            },
+            &Token {
+                _type: "Symbol".to_owned(),
+                value: "=".to_owned(),
+            },
+            &Token {
+                _type: "Number".to_owned(),
+                value: "10".to_owned(),
+            },
+            &Token {
+                _type: "Symbol".to_owned(),
+                value: ";".to_owned(),
+            },
         ];
         let mut isr = create_isr();
         let result = isr.scanner(code.into());
         let _tokens: [&Token; 5] = result.try_into().unwrap();
-        // println!("{}")
         assert_eq!(_tokens, tokens);
     }
 }
