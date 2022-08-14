@@ -1,7 +1,5 @@
-use super::{
-    dfa::{Path, Token, DFA},
-    dfs_state::DFAState,
-};
+use super::dfa::{Path, Token, DFA};
+use super::DFAState;
 
 #[derive(Default)]
 pub struct ISR {

@@ -1,4 +1,4 @@
-use crate::lexical::dfs_state::DFAState;
+use super::DFAState;
 
 pub fn judge_token_type(state: DFAState) -> String {
     use DFAState::*;

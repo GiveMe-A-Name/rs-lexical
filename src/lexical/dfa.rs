@@ -1,4 +1,5 @@
-use super::{dfs_state::DFAState, utils::judge_token_type};
+use super::utils::judge_token_type;
+use super::DFAState;
 
 #[derive(Debug)]
 pub struct Path {
