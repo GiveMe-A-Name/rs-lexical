@@ -1,6 +1,7 @@
-use crate::const_variable::DFAStateConst;
-
-use super::dfa::{Path, Token, DFA};
+use super::{
+    dfa::{Path, Token, DFA},
+    dfs_state::DFAState,
+};
 
 #[derive(Default)]
 pub struct ISR {
@@ -42,7 +43,7 @@ impl ISR {
             let mut end = false;
             let state = self.dfa.state;
             let next_state = self.dfa.next_state(ch, state);
-            let is_match = if next_state != DFAStateConst::SReset {
+            let is_match = if next_state != DFAState::Reset {
                 if self.is_last_char() {
                     end = true;
                 }
@@ -70,5 +71,31 @@ impl ISR {
                 self.dfa.clear();
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{lexical::dfa::Token, *};
+
+    fn create_isr() -> ISR {
+        ISR::default()
+    }
+
+    #[test]
+    fn test_create_tokens() {
+        let code = "const a = 10;";
+        let tokens = [
+            &Token::new("Identifier".to_owned(), "const".to_owned()),
+            &Token::new("Identifier".to_owned(), "a".to_owned()),
+            &Token::new("Symbol".to_owned(), "=".to_owned()),
+            &Token::new("Number".to_owned(), "10".to_owned()),
+            &Token::new("Symbol".to_owned(), ";".to_owned()),
+        ];
+        let mut isr = create_isr();
+        let result = isr.scanner(code.into());
+        let _tokens: [&Token; 5] = result.try_into().unwrap();
+        // println!("{}")
+        assert_eq!(_tokens, tokens);
     }
 }

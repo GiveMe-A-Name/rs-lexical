@@ -1,24 +1,29 @@
-use crate::{const_variable::DFAStateConst, utils::judge_token_type};
+use super::{dfs_state::DFAState, utils::judge_token_type};
 
 #[derive(Debug)]
 pub struct Path {
-    pub state: DFAStateConst,
+    pub state: DFAState,
     pub ch: char,
-    pub next_state: DFAStateConst,
+    pub next_state: DFAState,
     pub is_match: bool,
     pub end: bool,
 }
 
-#[derive(Debug)]
-
+#[derive(Debug, PartialEq, Eq)]
 pub struct Token {
     pub _type: String,
     pub value: String,
 }
 
+impl Token {
+    pub fn new(_type: String, value: String) -> Self {
+        Token { _type, value }
+    }
+}
+
 #[derive(Default)]
 pub struct DFA {
-    pub state: DFAStateConst,
+    pub state: DFAState,
     paths: Vec<Path>,
     matches: Vec<char>,
     pub tokens: Vec<Token>,
@@ -26,48 +31,49 @@ pub struct DFA {
 
 impl DFA {
     pub fn reset(&mut self) {
-        self.state = DFAStateConst::default();
+        self.state = DFAState::default();
         self.paths.clear();
         self.matches.clear();
         self.tokens.clear();
     }
 
-    pub fn next_state(&self, ch: char, state: DFAStateConst) -> DFAStateConst {
+    pub fn next_state(&self, ch: char, state: DFAState) -> DFAState {
+        use DFAState::*;
         match state {
-            DFAStateConst::SReset => {
+            Reset => {
                 if ch.is_alphabetic() {
-                    return DFAStateConst::SIdentifier;
+                    return Identifier;
                 }
                 if ch.is_ascii_digit() {
-                    return DFAStateConst::SNumber;
+                    return Number;
                 }
                 if ch.is_whitespace() {
-                    return DFAStateConst::SWhitespace;
+                    return Whitespace;
                 }
                 if ch == ';' || ch == '=' {
-                    return DFAStateConst::SSymbol;
+                    return Symbol;
                 }
             }
-            DFAStateConst::SIdentifier => {
+            Identifier => {
                 if ch.is_ascii_digit() || ch.is_alphabetic() {
-                    return DFAStateConst::SIdentifier;
+                    return Identifier;
                 }
             }
-            DFAStateConst::SNumber => {
+            Number => {
                 if ch.is_ascii_digit() {
-                    return DFAStateConst::SNumber;
+                    return Number;
                 }
             }
             _ => (),
         }
-        DFAStateConst::SReset
+        Reset
     }
 
     pub fn path_grow(&mut self, path: Path) {
         self.paths.push(path);
     }
 
-    pub fn flow_to_next(&mut self, ch: char, next_state: DFAStateConst) {
+    pub fn flow_to_next(&mut self, ch: char, next_state: DFAState) {
         self.matches.push(ch);
         self.state = next_state;
     }
@@ -84,7 +90,7 @@ impl DFA {
 
     pub fn clear(&mut self) {
         self.matches.clear();
-        self.state = DFAStateConst::default();
+        self.state = DFAState::default();
     }
 
     pub fn tokens(&self) -> Vec<&Token> {
